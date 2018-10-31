@@ -30,8 +30,8 @@ public class Gather {
 		
 		// At this point data in recvbuf
 		if (rank == ROOT) {
-			System.out.println("Process " + rank + " received -> " + Arrays.toString(recvbuf));
 		}
+		System.out.println("Process " + rank + " received -> " + Arrays.toString(recvbuf));
 		
 		MPI.Finalize();
 	}
