@@ -16,7 +16,7 @@ public class Gather {
 		int rank = MPI.COMM_WORLD.Rank();
 		int size = MPI.COMM_WORLD.Size();
 		
-		// Distribute size of data
+		// Initialize data
 		double[] sendbuf = new double[DATA_SIZE_PER_PROCESS];
 		Util.init(sendbuf, BOUND);
 		System.out.println("Send values -> " + Arrays.toString(sendbuf));
