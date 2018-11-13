@@ -12,8 +12,8 @@ public class Bcast {
 	public static void main(String[] args) {
 		MPI.Init(args);
 		
-		int rank = MPI.COMM_WORLD.Rank();
-		int size = MPI.COMM_WORLD.Size();
+		int rank = MPI.COMM_WORLD.Rank();  // MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+		int size = MPI.COMM_WORLD.Size();  // MPI_Comm_size(MPI_COMM_WORLD, &size);
 		
 		double[] values = new double[size];
 		if (rank == ROOT) {
