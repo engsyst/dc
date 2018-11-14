@@ -2,7 +2,6 @@ package ua.nure.trspo.mpi;
 
 import java.util.Arrays;
 
-import mpi.Comm;
 import mpi.Intracomm;
 import mpi.MPI;
 import ua.nure.trspo.Util;
