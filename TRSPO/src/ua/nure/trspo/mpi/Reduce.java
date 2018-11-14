@@ -2,6 +2,8 @@ package ua.nure.trspo.mpi;
 
 import java.util.Arrays;
 
+import mpi.Comm;
+import mpi.Intracomm;
 import mpi.MPI;
 import ua.nure.trspo.Util;
 
@@ -24,6 +26,20 @@ public class Reduce {
 		double max = max(values);
 		System.out.println("Process " + rank + " Max    -> " + max);
 		
+		Intracomm comm = MPI.COMM_WORLD;
+		printMsg("\n---=== COMM_WORLD ===---", rank, comm);
+		reduce(rank, max, comm);
+		
+		comm = Util.createStarComm(MPI.COMM_WORLD); 
+		printMsg("\n---=== COMM_STAR ===---", rank, comm);
+		reduce(rank, max, comm);
+		
+		MPI.Finalize();
+	}
+
+	public static void reduce(int rank, double max, Intracomm comm) {
+		printMsg("---- Reduce ----", rank, comm);
+
 		// All processes SHOULD create buffer for received data
 		// But only ROOT process obtain filed data
 		double[] buf = new double[] {max};
@@ -31,20 +47,25 @@ public class Reduce {
 		// Gathering data. 
 		// Each process sends own calculated value
 		// ROOT calculate total value using given operation -> MPI.MAX
-		MPI.COMM_WORLD.Reduce(buf, 0, buf, 0, 1, MPI.DOUBLE, MPI.MAX, ROOT); 
+		comm.Reduce(buf, 0, buf, 0, 1, MPI.DOUBLE, MPI.MAX, ROOT); 
 		
 		// At this point ROOT have total value in buf
-		if (rank == ROOT) {
-			System.out.println("Process " + rank + " received -> " + Arrays.toString(buf));
-		}
-		
-		// At this point all processes have total value in buf
-		MPI.COMM_WORLD.Allreduce(buf, 0, buf, 0, 1, MPI.DOUBLE, MPI.MAX); 
+		// Other processes have undefined value in buf
 		System.out.println("Process " + rank + " received -> " + Arrays.toString(buf));
 		
-		MPI.Finalize();
+		printMsg("---- Allreduce ----", rank, comm);
+		// At this point all processes have total value in buf
+		comm.Allreduce(buf, 0, buf, 0, 1, MPI.DOUBLE, MPI.MAX); 
+		System.out.println("Process " + rank + " received -> " + Arrays.toString(buf));
 	}
 
+	public static void printMsg(String msg, int rank, Intracomm comm) {
+		comm.Barrier(); // for better console output ONLY
+		if (rank == ROOT) {
+			System.out.println(msg);
+		}
+	}
+	
 	public static double max(double[] values) {
 		double max = values[0];
 		for (int j = 1; j < values.length; j++) {

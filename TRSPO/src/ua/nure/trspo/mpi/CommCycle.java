@@ -13,20 +13,9 @@ public class CommCycle {
 		MPI.Init(args);
 		int size = MPI.COMM_WORLD.Size();
 		int rank = MPI.COMM_WORLD.Rank();
-		if (rank == ROOT) {
-			System.out.println(MPI.Wtick());
-		}
 		int[] index = new int[size];
 		int[] edges = new int[size * 2];
-		for (int i = 0; i < size; i++) {
-			index[i] = i * 2;
-		}
-		System.out.println("Index -> " + Arrays.toString(index));
-		for (int i = 0, j = 0; i < size; i++, j++) {
-			edges[i * 2]     = j == 0        ? size - 1 : j - 1;
-			edges[i * 2 + 1] = j == size - 1 ? 0        : j + 1;
-		}
-		System.out.println("Edges -> " + Arrays.toString(edges));
+		initGraph(index, edges, size);
 
 		Comm cicle = MPI.COMM_WORLD.Create_graph(index, edges, false);
 		int left = rank == 0 ? size - 1 : rank - 1;
@@ -46,5 +35,17 @@ public class CommCycle {
 		System.out.println("Rank -> " + cicle.Rank() + " oldrank " + rank);
 
 		MPI.Finalize();
+	}
+
+	private static void initGraph(int[] index, int[] edges, int size) {
+		for (int i = 0; i < size; i++) {
+			index[i] = i * 2;
+		}
+		System.out.println("Index -> " + Arrays.toString(index));
+		for (int i = 0, j = 0; i < size; i++, j++) {
+			edges[i * 2]     = j == 0        ? size - 1 : j - 1;
+			edges[i * 2 + 1] = j == size - 1 ? 0        : j + 1;
+		}
+		System.out.println("Edges -> " + Arrays.toString(edges));
 	}
 }
