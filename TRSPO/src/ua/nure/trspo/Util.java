@@ -37,6 +37,13 @@ public class Util {
 		return vals;
 	}
 
+	public static double[] initSequental(double[] vals, int start) {
+		for (int i = 0; i < vals.length; i++) {
+			vals[i] = start++;
+		}
+		return vals;
+	}
+	
 	public static void longWork(long timeout) {
 		if (timeout == 0) 
 			return;
@@ -66,5 +73,14 @@ public class Util {
 			System.out.println("Edges -> " + Arrays.toString(edges));
 		}
 		return comm.Create_graph(index, edges, false);
+	}
+
+	public static String toString(String format, String separator, double... vals) {
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < vals.length; i++) {
+			sb.append(String.format(format, vals[i])).append(separator);
+		}
+		sb.delete(sb.length() - separator.length(), sb.length());
+		return sb.toString();
 	}
 }
