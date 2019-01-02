@@ -26,18 +26,24 @@ public class Reduce {
 		System.out.println("Process " + rank + " Max    -> " + max);
 		
 		Intracomm comm = MPI.COMM_WORLD;
-		printMsg("\n---=== COMM_WORLD ===---", rank, comm);
-		reduce(rank, max, comm);
+		printMsg("\n---=== COMM_WORLD ===---",comm);
+		double rMax = reduce(max, comm);
+		System.out.println("Process " + rank + " received -> " + rMax);
+		rMax = allreduce(max, comm);
+		System.out.println("Process " + rank + " received -> " + rMax);
 		
+		printMsg("\n---=== COMM_STAR ===---", comm);
 		comm = Util.createStarComm(MPI.COMM_WORLD); 
-		printMsg("\n---=== COMM_STAR ===---", rank, comm);
-		reduce(rank, max, comm);
+		rMax = reduce(max, comm);
+		System.out.println("Process " + rank + " received -> " + rMax);
+		rMax = allreduce(max, comm);
+		System.out.println("Process " + rank + " received -> " + rMax);
 		
 		MPI.Finalize();
 	}
 
-	public static void reduce(int rank, double max, Intracomm comm) {
-		printMsg("---- Reduce ----", rank, comm);
+	public static double reduce(double max, Intracomm comm) {
+		printMsg("---- Reduce ----", comm);
 
 		// All processes SHOULD create buffer for received data
 		// But only ROOT process obtain filed data
@@ -47,20 +53,23 @@ public class Reduce {
 		// Each process sends own calculated value
 		// ROOT calculate total value using given operation -> MPI.MAX
 		comm.Reduce(buf, 0, buf, 0, 1, MPI.DOUBLE, MPI.MAX, ROOT); 
-		
-		// At this point ROOT have total value in buf
-		// Other processes have undefined value in buf
-		System.out.println("Process " + rank + " received -> " + Arrays.toString(buf));
-		
-		printMsg("---- Allreduce ----", rank, comm);
-		// At this point all processes have total value in buf
-		comm.Allreduce(buf, 0, buf, 0, 1, MPI.DOUBLE, MPI.MAX); 
-		System.out.println("Process " + rank + " received -> " + Arrays.toString(buf));
+		return buf[0]; 
 	}
 
-	public static void printMsg(String msg, int rank, Intracomm comm) {
+	public static double allreduce(double max, Intracomm comm) {
+		printMsg("---- Allreduce ----", comm);
+		
+		// All processes SHOULD create buffer for received data
+		double[] buf = new double[] {max};
+
+		// At this point all processes have total value in buf
+		comm.Allreduce(buf, 0, buf, 0, 1, MPI.DOUBLE, MPI.MAX); 
+		return buf[0]; 
+	}
+	
+	public static void printMsg(String msg, Intracomm comm) {
 		comm.Barrier(); // for better console output ONLY
-		if (rank == ROOT) {
+		if (comm.Rank() == ROOT) {
 			System.out.println(msg);
 		}
 	}
