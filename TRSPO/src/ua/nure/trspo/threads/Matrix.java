@@ -91,12 +91,12 @@ public class Matrix {
 	private static final int BOUND = 50;
 	private static final long TIMEOUT = 0;
 	
-	private static final int ROWS = 100;
+	private static final int ROWS = 10;
 	private static final int COLS = 1_000_000;
 
 	public static void main(String[] args) {
 		Matrix matrix = new Matrix(Util.init(ROWS, COLS, BOUND));
-		
+		System.out.println("Threads: " + matrix.maxThreads);
 		System.out.println("Sequental ");
 		long startTime = System.currentTimeMillis();
 		double max = matrix.max();

@@ -106,7 +106,7 @@ public class Matrix {
 	private static final int BOUND = 50;
 	private static final long TIMEOUT = 0;
 	
-	private static final int ROWS = 100;
+	private static final int ROWS = 12;
 	private static final int COLS = 1_000_000;
 
 	public static void main(String[] args) throws FileNotFoundException {
@@ -120,7 +120,7 @@ public class Matrix {
 		System.out.println("Sequental -> " + max + " time -> " + (endTime - startTime));
 		
 		startTime = System.currentTimeMillis();
-		max = matrix.parallelMax(1/*ROWS / CORES / 8*/);
+		max = matrix.parallelMax(2);
 		endTime = System.currentTimeMillis();
 		System.out.println("Parallel  -> " + max + " time -> " + (endTime - startTime));
 		matrix.shutdown();

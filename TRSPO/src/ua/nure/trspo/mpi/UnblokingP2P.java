@@ -23,17 +23,17 @@ public class UnblokingP2P {
 		int right = rank == size - 1 ? 0 : rank + 1;
 		int[] sendbuf = new int[] {rank, rank};
 		int[] recvbuf = new int[2];
-		// Send less part of sendbuf to left process
+		// Send lower part of sendbuf to the left process
 		MPI.COMM_WORLD.Isend(sendbuf, 0, 1, MPI.INT, left, 1);
-		// Send greatest part of sendbuf to right process
+		// Send higher part of sendbuf to the right process
 		MPI.COMM_WORLD.Isend(sendbuf, 1, 1, MPI.INT, right, 1);
 		
-		// Try receive greatest part to recvbuf from right process
+		// Try receive higher part to the recvbuf from the right process
 		Request rRequest = MPI.COMM_WORLD.Irecv(recvbuf, 1, 1, MPI.INT, right, MPI.ANY_TAG);
-		// Try receive less part to recvbuf from left process
+		// Try receive lower part to recvbuf from the left process
 		Request lRequest = MPI.COMM_WORLD.Irecv(recvbuf, 0, 1, MPI.INT, left, MPI.ANY_TAG);
 		System.out.println("Process " + rank + " do something while message sends");
-		// if Wait was not called, recvbuf may be empty
+		// if Wait() was not called, recvbuf may be empty
 		// try comment it
 		rRequest.Wait();
 		lRequest.Wait();
