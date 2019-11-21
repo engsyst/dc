@@ -39,8 +39,11 @@ public class Scatter {
 		MPI.COMM_WORLD.Scatter(
 				sendbuf, 0, dataSize[0], MPI.DOUBLE, 
 				recvbuf, 0, dataSize[0], MPI.DOUBLE, ROOT);
-		// At this point data in rvalues
+		// At this point data in recvbuf
 		System.out.println("Process " + rank + " received -> " + Arrays.toString(recvbuf));
+
+		MPI.COMM_WORLD.Barrier();
+		System.out.println("Process " + rank + " sendbuf -> " + Arrays.toString(sendbuf));
 		
 		MPI.Finalize();
 	}

@@ -5,8 +5,9 @@ import java.util.Arrays;
 import mpi.Comm;
 import mpi.MPI;
 
-public class CommCycle {
-	private static final int ITERATIONS = 500_500;
+public class CommGraphCycle {
+	private static final int MILLIS = 1000;
+	private static final int ITERATIONS = 500;
 	private static final int ROOT = 0;
 
 	public static void main(String[] args) {
@@ -18,21 +19,27 @@ public class CommCycle {
 		initGraph(index, edges, size);
 
 		Comm cicle = MPI.COMM_WORLD.Create_graph(index, edges, false);
-		int left = rank == 0 ? size - 1 : rank - 1;
-		int right = rank == size - 1 ? 0 : rank + 1;
+		System.out.println("Rank -> " + cicle.Rank() + " oldrank " + rank);
+		
+		// neighbors
+		int left = (rank + size - 1) % size;
+		int right = (rank + 1) % size;
+		System.out.println("Left " + left + " Rank -> " + cicle.Rank() + " Right " + right);
 		int[] sendbuf = new int[] { rank };
 		int[] recvbuf = new int[1];
 		cicle.Sendrecv(sendbuf, 0, 1, MPI.INT, right, 1, recvbuf, 0, 1, MPI.INT, left, 1);
 		long st;
 		long et;
+		
+		MPI.COMM_WORLD.Barrier();
 		st = System.currentTimeMillis();
 		for (int i = 0; i < ITERATIONS; i++) {
-			cicle.Sendrecv(sendbuf, 0, 1, MPI.INT, right, 1, recvbuf, 0, 1, MPI.INT, left, 1);
+			cicle.Sendrecv(sendbuf, 0, 1, MPI.INT, right, 1, 
+					recvbuf, 0, 1, MPI.INT, left, 1);
 		}
 		et = System.currentTimeMillis();
-		System.out.println("Time " + (et - st));
+		System.out.println("Time " + ((double)(et - st)) / MILLIS + " s");
 		System.out.println("Process " + rank + ": Send -> " + sendbuf[0] + ", receive " + recvbuf[0]);
-		System.out.println("Rank -> " + cicle.Rank() + " oldrank " + rank);
 
 		MPI.Finalize();
 	}

@@ -1,7 +1,5 @@
 package ua.nure.trspo.mpi;
 
-import java.util.Arrays;
-
 import mpi.MPI;
 import ua.nure.trspo.Util;
 
@@ -20,7 +18,7 @@ public class Bcast {
 			Util.init(values, BOUND);
 		}
 		MPI.COMM_WORLD.Bcast(values, 0, size, MPI.DOUBLE, ROOT);
-		System.out.println("Process " + rank + " received -> " + Arrays.toString(values));
+		System.out.println("Process " + rank + " received -> " + Util.toString("%6.2f", ",", values));
 		
 		MPI.Finalize();
 	}

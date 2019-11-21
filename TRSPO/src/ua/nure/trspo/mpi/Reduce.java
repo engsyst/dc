@@ -22,7 +22,7 @@ public class Reduce {
 		System.out.println("Process " + rank + " values -> " + Arrays.toString(values));
 		
 		// Each process calculate max value
-		double max = max(values);
+		double max = Util.max(values);
 		System.out.println("Process " + rank + " Max    -> " + max);
 		
 		Intracomm comm = MPI.COMM_WORLD;
@@ -72,15 +72,5 @@ public class Reduce {
 		if (comm.Rank() == ROOT) {
 			System.out.println(msg);
 		}
-	}
-	
-	public static double max(double[] values) {
-		double max = values[0];
-		for (int j = 1; j < values.length; j++) {
-			if (max < values[j]) {
-				max = values[j];
-			}
-		}
-		return max;
 	}
 }

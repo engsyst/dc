@@ -44,6 +44,16 @@ public class Util {
 		return vals;
 	}
 	
+	public static double max(double[] values) {
+		double max = values[0];
+		for (int j = 1; j < values.length; j++) {
+			if (max < values[j]) {
+				max = values[j];
+			}
+		}
+		return max;
+	}
+	
 	public static void longWork(long timeout) {
 		if (timeout == 0) 
 			return;

@@ -43,14 +43,15 @@ public class Gatherv {
 		double[] recvbuf = new double[totalDataSize];
 		double[] sendbuf = new double[dataSize[0]];
 		Util.init(sendbuf, BOUND);
-		System.out.println("Process " + rank + " send values -> " + Arrays.toString(sendbuf));
+		System.out.println("Process " + rank + " send values -> " + Util.toString("%6.2f", ",", sendbuf));
 		
-		MPI.COMM_WORLD.Gatherv(sendbuf, 0, recvcount[rank], MPI.DOUBLE, recvbuf, 0, recvcount, displs, MPI.DOUBLE, ROOT);
+		MPI.COMM_WORLD.Gatherv(sendbuf, 0, recvcount[rank], MPI.DOUBLE, 
+				recvbuf, 0, recvcount, displs, MPI.DOUBLE, ROOT);
 		
 		// At this point data in recvbuf
 		if (rank == ROOT) {
 		}
-		System.out.println("Process " + rank + " received -> " + Arrays.toString(recvbuf));
+		System.out.println("Process " + rank + " received -> " + Util.toString("%6.2f", ",", recvbuf));
 		
 		MPI.Finalize();
 	}

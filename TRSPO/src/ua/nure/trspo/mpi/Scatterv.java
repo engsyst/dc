@@ -58,7 +58,7 @@ public class Scatterv {
 				sendbuf, 0, sendcount, displs, MPI.DOUBLE, 
 				recvbuf, 0, sendcount[rank], MPI.DOUBLE, ROOT);
 		// At this point data in recvbuf
-		System.out.println("Process " + rank + " received data -> " + Arrays.toString(recvbuf));
+		System.out.println("Process " + rank + " received data -> " + Util.toString("%6.2f", ",", recvbuf));
 
 		MPI.Finalize();
 	}
