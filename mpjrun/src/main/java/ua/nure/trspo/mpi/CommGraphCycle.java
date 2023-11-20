@@ -46,7 +46,7 @@ public class CommGraphCycle {
 
 	private static void initGraph(int[] index, int[] edges, int size) {
 		for (int i = 0; i < size; i++) {
-			index[i] = i * 2;
+			index[i] = 2;
 		}
 		System.out.println("Index -> " + Arrays.toString(index));
 		for (int i = 0, j = 0; i < size; i++, j++) {

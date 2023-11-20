@@ -35,15 +35,15 @@ public class VectorSum {
 		// distribute data between processes
 		MPI.COMM_WORLD.Scatter(vector, 0, dataSize[0], MPI.DOUBLE, recvbuf, 0, dataSize[0], MPI.DOUBLE, ROOT);
 		
-		// calculate MAX value for the given portion of data
-		double[] max = new double[] { Util.max(recvbuf) };
+		// calculate SUM value for the given portion of data
+		double[] sum = new double[] { Util.sum(recvbuf) };
 		
-		// gather calculated MAX value from all processes 
-		// and perform MPI_MAX operation while gathering
-		MPI.COMM_WORLD.Reduce(max, 0, max, 0, 1, MPI.DOUBLE, MPI.MAX, ROOT);
+		// gather calculated SUM value from all processes 
+		// and perform MPI_SUM operation while gathering
+		MPI.COMM_WORLD.Reduce(sum, 0, sum, 0, 1, MPI.DOUBLE, MPI.SUM, ROOT);
 		
-		// each process print local MAX value, but ROOT print total MAX value
-		System.out.println("Max " + rank +  " -> " + max[0]);
+		// each process print local SUM value, but ROOT print total SUM value
+		System.out.println("Sum " + rank +  " -> " + sum[0]);
 		
 		MPI.Finalize();
 	}

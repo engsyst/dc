@@ -37,11 +37,18 @@ public class UnblokingP2P {
 
 		Request[] requests = new Request[] { lRequest, rRequest };
 		Status[] test;
+		Status status;
 //		do {
-//			test = Request.Testall(requests);
+//			test = Request.Testsome(requests);
 //			System.out.println("Process " + rank + " received -> " + Arrays.toString(recvbuf));
 //			System.out.println(test != null);
 //		} while (test == null);
+		
+//		do {
+//			status = Request.Testany(requests);
+//			System.out.println("Process " + rank + " received -> " + Arrays.toString(recvbuf));
+//			System.out.println(status != null);
+//		} while (status == null);
 
 		// if Wait() was not called, recvbuf may be empty
 		// try comment it

@@ -13,7 +13,7 @@ public class For {
 	public void test2() {
 		// omp parallel for
 		for (int i = 2; i < this.field; i += 3) {
-			System.out.println("hello @" + i);
+			System.out.println(Thread.currentThread().getName() + "hello @" + i);
 		}
 	}
 

@@ -19,16 +19,16 @@ public class Util {
 		}
 		return vals;
 	}
-	
+
 	public static double[] init(int cols, int bound) {
 		double[] vals = new double[cols];
 		Random r = new Random();
 		for (int i = 0; i < vals.length; i++) {
-				vals[i] = r.nextDouble() * bound;
+			vals[i] = r.nextDouble() * bound;
 		}
 		return vals;
 	}
-	
+
 	public static double[] init(double[] vals, int bound) {
 		Random r = new Random();
 		for (int i = 0; i < vals.length; i++) {
@@ -43,7 +43,7 @@ public class Util {
 		}
 		return vals;
 	}
-	
+
 	public static double max(double[] values) {
 		double max = values[0];
 		for (int j = 1; j < values.length; j++) {
@@ -53,7 +53,15 @@ public class Util {
 		}
 		return max;
 	}
-	
+
+	public static double sum(double[] values) {
+		double sum = 0;
+		for (int j = 0; j < values.length; j++) {
+			sum += values[j];
+		}
+		return sum;
+	}
+
 	public static void longWork(long timeout) {
 //		if (timeout == 0) 
 //			return;
@@ -66,8 +74,8 @@ public class Util {
 
 	public static Intracomm createStarComm(Intracomm comm) {
 		int size = comm.Size();
-		int[] index = new int[size]; 
-		int[] edges = new int[size * 2]; 
+		int[] index = new int[size];
+		int[] edges = new int[size * 2];
 		for (int i = 0; i < size; i++) {
 			index[i] = i * 2;
 		}
@@ -76,10 +84,10 @@ public class Util {
 			System.out.println("Index -> " + Arrays.toString(index));
 		}
 		for (int i = 0, j = 0; i < size; i++, j++) {
-			edges[i * 2]     = 0;
+			edges[i * 2] = 0;
 			edges[i * 2 + 1] = j;
 		}
-		if (rank == 0) { 
+		if (rank == 0) {
 			System.out.println("Edges -> " + Arrays.toString(edges));
 		}
 		return comm.Create_graph(index, edges, false);
